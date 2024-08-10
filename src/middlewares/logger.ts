@@ -18,9 +18,9 @@ export const logEvents = async (message: string, logFileName: string) => {
     }
 }
 
-
 const logger: RequestHandler = async (req, res, next) => {
     try {
+        console.log(req.headers)
         const requestEventId = randomUUID()
         const message = `${requestEventId}\t${req.method}\t${req.url}\t${req.headers.origin}`
         console.log(`${req.method} ${req.path} @${requestEventId} from ${req.ip}`)

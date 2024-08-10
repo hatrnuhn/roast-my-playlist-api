@@ -5,15 +5,13 @@ import logger from './middlewares/logger'
 import corsOptions from './config/corsOptions'
 import errorHandler from './middlewares/errorHandler'
 import apiRouter from './routes'
-import rateLimit from 'express-rate-limit'
-import rateLimitOptions from './config/rateLimitOptions'
 
 const server = express()
 const version = process.env.VERSION || 'v1'
 
+server.enable('trust proxy')
 server.use(logger)
 server.use(cors(corsOptions))
-server.use(rateLimit(rateLimitOptions))
 server.use('/', express.static(path.join(__dirname, '..', '/public')))
         .get('^/$|/index(.html)?', (req, res) => res.sendFile(path.join(__dirname, '..', 'views', 'index.html')))
 server.use(express.json())

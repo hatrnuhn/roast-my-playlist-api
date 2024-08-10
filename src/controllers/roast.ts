@@ -11,13 +11,13 @@ class RoastController {
     }
 
     public createRoast: RequestHandler = async (req, res) => {
-        const { playlistId } = req.body
-        const roast = await roastService.create(playlistId)
+        const { playlistId, language } = res.locals.validated
+        const roast = await roastService.create(playlistId, language)
         res.status(200).json(roast)
     }
 
     public getRoast: RequestHandler = async (req, res) => {
-        const { roastId } = req.params
+        const { roastId } = res.locals.validated
         const roast = await roastService.get(roastId)
         res.status(200).json(roast)
     }
