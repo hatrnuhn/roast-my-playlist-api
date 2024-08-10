@@ -17,3 +17,7 @@ export const RoastGet = Type.Object({
         pattern: '^[a-z0-9]+$'
      })
 })
+
+export const PlaylistGet = Type.Object({
+    playlistId: Type.String({ pattern: '^[a-zA-Z0-9_-]{22}$' })
+})

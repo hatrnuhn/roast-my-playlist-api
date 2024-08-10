@@ -34,14 +34,19 @@ export class PlaylistRepo {
             }, 
             include: {
                 _count: true,
-                roasts: true
+                roasts: {
+                    select: {
+                        id: true,
+                        content: true
+                    }
+                }
             }
         })
 
         return {
             id: playlist.id,
             roasts: playlist.roasts,
-            roastsCount: playlist._count
+            roastsCount: playlist._count.roasts
         }
     }
 }
