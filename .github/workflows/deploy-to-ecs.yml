@@ -47,5 +47,16 @@ jobs:
           sudo docker pull ${{ vars.DOCKERHUB_USERNAME }}/roast-my-playlist:latest
           sudo docker stop ${{ vars.CONTAINER_NAME }} || true
           sudo docker rm ${{ vars.CONTAINER_NAME }} || true
-          sudo docker run -d -p ${{ vars.EXPOSED_PORT }}:${{ vars.EXPOSED_PORT }} --name ${{ vars.CONTAINER_NAME }} -e ALLOWED_ORIGINS=${{ vars.ALLOWED_ORIGINS }} -e SPOTIFY_CLIENT_ID=${{ vars.SPOTIFY_CLIENT_ID }} -e SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }} -e SPOTIFY_API_URL=${{ vars.SPOTIFY_API_URL }} -e SPOTIFY_AUTH_URL=${{ vars.SPOTIFY_AUTH_URL }} -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e PORT=${{ vars.PORT }} hatrnuhn/roast-my-playlist:latest
+          sudo docker run -d -p ${{ vars.EXPOSED_PORT }}:${{ vars.EXPOSED_PORT }} \
+          --name ${{ vars.CONTAINER_NAME }} \
+          -e ALLOWED_ORIGINS="${{ vars.ALLOWED_ORIGINS }}" \
+          -e SPOTIFY_CLIENT_ID=${{ vars.SPOTIFY_CLIENT_ID }} \
+          -e SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }} \
+          -e SPOTIFY_API_URL=${{ vars.SPOTIFY_API_URL }} \
+          -e SPOTIFY_AUTH_URL=${{ vars.SPOTIFY_AUTH_URL }} \
+          -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
+          -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+          -e PORT=${{ vars.PORT }} \
+          ${{ vars.DOCKERHUB_USERNAME }}/roast-my-playlist:latest
+          sudo docker image prune -f
         EOF
