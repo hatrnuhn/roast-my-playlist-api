@@ -3,10 +3,10 @@ import { Type } from "@sinclair/typebox";
 export const RoastPost = Type.Object({
     playlistId: Type.String({ pattern: '^[a-zA-Z0-9_-]{22}$' }),
     language: Type.Optional(Type.Union([
-        Type.Literal('en'),
-        Type.Literal('id')
+        Type.Literal('EN'),
+        Type.Literal('ID')
     ], {
-        default: 'en'
+        default: 'EN'
     }))
 })
 
