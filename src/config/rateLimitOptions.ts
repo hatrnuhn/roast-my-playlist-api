@@ -6,18 +6,20 @@ const keyGenerator: ValueDeterminingMiddleware<string> = (req, res) => {
 
 export const postRateLimitOptions: Partial<Options> = {
     windowMs: 1 * 60 * 1000,
-    limit: 5,
+    limit: 7,
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator
+    keyGenerator,
+    skip: req => req.method !== 'POST'
 }
 
 export const getRateLimitOptions: Partial<Options> = {
     windowMs: 1 * 60 * 1000,
-    limit: 15,
+    limit: 30,
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator
+    keyGenerator,
+    skip: req => req.method !== 'GET'
 }
 
 export const postGlobalRateLimitOptions: Partial<Options> = {
@@ -25,5 +27,6 @@ export const postGlobalRateLimitOptions: Partial<Options> = {
     limit: 900,
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator: () => 'post global limit'
+    keyGenerator: () => 'post global limit',
+    skip: req => req.method !== 'POST'
 }

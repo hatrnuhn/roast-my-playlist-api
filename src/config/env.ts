@@ -5,7 +5,8 @@ export const checkEnv = (): void => {
         SPOTIFY_API_URL,
         SPOTIFY_AUTH_URL,
         GEMINI_API_KEY,
-        DATABASE_URL
+        REDIS_HOST,
+        REDIS_PORT
     } = process.env;
 
     const baseMsg = 'Missing env variable: ';
@@ -21,8 +22,10 @@ export const checkEnv = (): void => {
         missingEnvVarErrorMsgs.push(baseMsg + 'SPOTIFY_AUTH_URL');
     if (!GEMINI_API_KEY)
         missingEnvVarErrorMsgs.push(baseMsg + 'GEMINI_API_KEY');
-    if (!DATABASE_URL)
-        missingEnvVarErrorMsgs.push(baseMsg + 'DATABASE_URL');
+    if (!REDIS_HOST)
+        missingEnvVarErrorMsgs.push(baseMsg + 'REDIS_HOST');
+    if (!REDIS_PORT)
+        missingEnvVarErrorMsgs.push(baseMsg + 'REDIS_PORT')
 
     if (missingEnvVarErrorMsgs.length > 0) {
         throw new Error(missingEnvVarErrorMsgs.join('\n'));

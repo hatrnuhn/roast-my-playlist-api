@@ -6,3 +6,9 @@ export type Track = {
         releaseDate: string
     }
 }
+
+export type Playlist = {
+    playlistName: string
+    playlistTotalFollowers: number
+    tracks: Track[]
+}

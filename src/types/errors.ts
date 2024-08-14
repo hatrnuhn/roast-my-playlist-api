@@ -38,3 +38,9 @@ export class ValidationError extends GeneralError {
         return this.onSchema
     }
 }
+
+export class RedisNotFoundError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}

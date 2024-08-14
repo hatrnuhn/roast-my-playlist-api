@@ -1,54 +1,32 @@
-import { PrismaClient } from "@prisma/client"
+import { RedisClientType, RedisFunctions, RedisModules, RedisScripts } from "@redis/client";
+import { newClient } from "../redis";
+import { RedisDefaultModules } from "redis";
+import { Playlist } from "../types/spotify";
 
 export class PlaylistRepo {
-    private prisma: PrismaClient
+    private redis: RedisClientType<RedisDefaultModules & RedisModules, RedisFunctions, RedisScripts>
 
-    constructor(prisma: PrismaClient) {
-        this.prisma = prisma
+    constructor(redis: RedisClientType<RedisDefaultModules & RedisModules, RedisFunctions, RedisScripts>) {
+        this.redis = redis
     }
 
-    public async isExisting(playlistId: string) {
-        const playlist = await this.prisma.playlist.findUnique({
-            where: {
-                id: playlistId
-            }
-        })
-
-        return (!!playlist)
+    public static async createInstance() {
+        const redis = await newClient()
+        const instance = new PlaylistRepo(redis)
+        return instance
     }
 
-    public async create(playlistId: string) {
-        const playlist = await this.prisma.playlist.create({
-            data: {
-                id: playlistId
-            }
-        })
-
-        return playlist.id
+    public async create(playlistId: string, playlist: Playlist) {
+        await this.redis.setEx(playlistId, 2 * 60, JSON.stringify(playlist))
     }
 
     public async get(playlistId: string) {
-        const playlist = await this.prisma.playlist.findUniqueOrThrow({
-            where: {
-                id: playlistId
-            }, 
-            include: {
-                _count: true,
-                roasts: {
-                    select: {
-                        id: true,
-                        content: true
-                    }
-                }
-            }
-        })
+        const redis = await newClient()
+        const data = await redis.get(playlistId)
+        
+        if (!data)
+            return null
 
-        return {
-            id: playlist.id,
-            roasts: playlist.roasts,
-            roastsCount: playlist._count.roasts
-        }
+        return JSON.parse(data) as Playlist
     }
 }
-
-export default new PlaylistRepo(new PrismaClient())

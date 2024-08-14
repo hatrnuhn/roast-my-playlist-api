@@ -57,6 +57,8 @@ jobs:
           -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
           -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
           -e PORT=${{ vars.PORT }} \
+          -e REDIS_PORT=${{ vars.REDIS_PORT }} \
+          -e REDIS_HOST=${{ vars.REDIS_HOST }} \
           ${{ vars.DOCKERHUB_USERNAME }}/roast-my-playlist:latest
           sudo docker image prune -f
         EOF

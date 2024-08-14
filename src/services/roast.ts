@@ -1,22 +1,29 @@
 import gemini from "../libs/gemini"
 import spotify from "../libs/spotify"
 import YAML from 'yaml'
-import roastRepo from '../repositories/roast'
+import { PlaylistRepo } from "../repositories/playlist"
+import { Playlist } from "../types/spotify"
 
 class RoastService {
     public async create(playlistId: string, lang: 'EN' | 'ID' = 'EN') {
-        const playlistData = await spotify.getPlaylist(playlistId)
-        const prompt = `Roast me off my spotify music playlist (and please do not genderize me), use gen Z internet slangs, and make it less than 100 words long yet edgy. Here is the playlist data in YAML${lang === 'EN' ? '' : ', do it in Bahasa Indonesia'} and DO YOUR WORST! ${YAML.stringify(playlistData)}`
-        const roast = await gemini.generateText(prompt)        
-        return roastRepo.create(roast, playlistId)
-    }
+        const playlistRepo = await  PlaylistRepo.createInstance()
+        const cachedData = await playlistRepo.get(playlistId)
+        let playlistData: Playlist | null = null
 
-    public async get(roastId: string) {
-        const roast = await roastRepo.getOne(roastId)
+        if (!cachedData) {
+            playlistData = await spotify.getPlaylist(playlistId)
+            await playlistRepo.create(playlistId, playlistData)
+        }
+        else
+            playlistData = cachedData
+
+        const prompt = `Roast me off my Spotify music playlist, use gen Z internet slangs, do not genderize me and use gender-neutral pronounts, lastly make it less than 120 words long yet edgy. Here is the playlist data in YAML${lang === 'EN' ? '' : ', do it in Bahasa Indonesia'} and DO YOUR WORST! ${YAML.stringify(playlistData)}`
+        const roast = await gemini.generateText(prompt)
+
         return {
-            id: roast.id,
-            content: roast.content,
-            playlistId: roast.playlistId
+            playlistId,
+            content: roast,
+            createdAt: new Date().toISOString()
         }
     }
 }

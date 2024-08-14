@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import axios from "../axios";
 import { snakeToCamelCase } from "./formatter";
-import { Track } from "../types/spotify";
+import { Playlist, Track } from "../types/spotify";
 
 export class SpotifyLibrary {
     private axios: AxiosInstance
@@ -36,7 +36,7 @@ export class SpotifyLibrary {
             playlistName: res.data.name,
             playlistTotalFollowers: res.data.followers.total,
             tracks
-        }
+        } as Playlist
     }
 }
 
