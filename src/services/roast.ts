@@ -17,7 +17,7 @@ class RoastService {
         else
             playlistData = cachedData
 
-        const prompt = `Roast me off my Spotify music playlist, use gen Z internet slangs, do not genderize me and use gender-neutral pronounts, lastly make it less than 120 words long yet edgy. Here is the playlist data in YAML${lang === 'EN' ? '' : ', do it in Bahasa Indonesia'} and DO YOUR WORST! ${YAML.stringify(playlistData)}`
+        const prompt = `Roast me based off my music playlist, use gen Z internet slangs, don't genderize me so use gender-neutral pronounts, make it less than 100 words long yet edgy. Here is the playlist data in YAML${lang === 'EN' ? '' : ', do it in Bahasa Indonesia'} and DO YOUR WORST! ${YAML.stringify(playlistData)}`
         const roast = await gemini.generateText(prompt)
 
         return {

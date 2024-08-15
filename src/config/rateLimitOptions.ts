@@ -6,7 +6,7 @@ const keyGenerator: ValueDeterminingMiddleware<string> = (req, res) => {
 
 export const postRateLimitOptions: Partial<Options> = {
     windowMs: 1 * 60 * 1000,
-    limit: 7,
+    limit: 5,
     standardHeaders: true,
     legacyHeaders: false,
     keyGenerator,
